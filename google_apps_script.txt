@@ -1,0 +1,60 @@
+function copyFromSheetToSheet(fromSSID, toSSID, toAnchor, toSheetID, includeHeader) {
+  // Defaults
+  if (toAnchor == null) toAnchor = "A1";
+  if (includeHeader == null) includeHeader = true;
+  if (toSheetID == null) toSheetID = 1;
+  
+  // For debugging
+  
+  Logger.log(fromSSID + " | " + toSSID + " | " + toAnchor + " | " + toSheetID + " | " + includeHeader);
+  
+  // Get the spreadsheets and the (work)sheets within them
+  
+  fromSS = SpreadsheetApp.openById(fromSSID);
+  toSS = SpreadsheetApp.openById(toSSID);
+  
+  fromSheet = fromSS.getSheets()[0];
+  if (typeof toSheetID == "number") {
+    toSheet = toSS.getSheets()[toSheetID - 1];
+  } else {
+    toSheet = toSS.getSheetByName(toSheetID);
+  }
+  
+  // Get the ranges (and enlarge target sheet if necessary)
+  
+  fromRange = fromSheet.getDataRange();
+  if (!includeHeader) fromRange = fromRange.offset(1, 0, fromRange.getNumRows() - 1);
+  
+  toCell = toSheet.getRange(toAnchor);
+    
+  if (fromRange.getNumColumns() + toCell.getColumn() > 1 + toSheet.getMaxColumns()) {
+    toSheet.insertColumnsAfter(toSheet.getMaxColumns(), fromRange.getNumColumns() + toCell.getColumn() - (1 + toSheet.getMaxColumns()));
+  }
+  if (fromRange.getNumRows() + toCell.getRow() > 1 + toSheet.getMaxRows()) {
+    toSheet.insertRowsAfter(toSheet.getMaxRows(), fromRange.getNumRows() + toCell.getRow() - (1 + toSheet.getMaxRows()));
+  }
+  
+  toRange = toSheet.getRange(toCell.getRow(), toCell.getColumn(), fromRange.getNumRows(), fromRange.getNumColumns());
+    
+  // Copy the data
+  
+  // It seems that Range.setValues() works if there is a mixture of formulas and values, so we use that.
+  // However, this behaviour is not documented!
+  // Unfortunately there is no Range.getFormulasAndValues() so we must combine them manually.
+  
+  outputAll = fromRange.getFormulas();
+  outputValues = fromRange.getValues();
+  
+  rows = outputAll.length;
+  cols = outputAll[0].length;
+    
+  for (i = 0; i < rows; i++) {
+    for (j = 0; j < cols; j++) {
+      if (outputAll[i][j] == "") outputAll[i][j] = outputValues[i][j];
+    }
+  }
+  
+  toRange.setValues(outputAll);  
+ 
+  Logger.log("Done!");
+}

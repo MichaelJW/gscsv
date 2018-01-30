@@ -1,0 +1,17 @@
+Package: gscsv
+Type: Package
+Title: Edit Google Sheets via CSV Upload
+Version: 0.1.0
+Author: @MichaelJW
+Maintainer: Michael James Williams <michael@michaeljameswilliams.com>
+Description: Lets you edit Google Sheets cells by uploading a CSV of
+    your data to Google Drive, having it converted to a new Google Sheet,
+    and then running a Google Apps Script to copy the data to another
+    Google Sheet as desired. Much faster than uploading cell-by-cell.
+License: TBD
+Encoding: UTF-8
+LazyData: true
+Imports:
+    googlesheets,
+    httr,
+    dplyr
