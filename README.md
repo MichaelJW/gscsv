@@ -1,7 +1,7 @@
 GSCSV
 -----
 
-Edit an existing Google Sheets worksheet via uploading a CSV rather than cell-by-cell. Uses the same arguments as googlesheets::gs_edit_cells(), making it easy to swap one call for the other.
+Edit an existing Google Sheets worksheet via uploading a CSV rather than cell-by-cell. Uses the same arguments as `googlesheets::gs_edit_cells()`, making it easy to swap one call for the other.
 
 ### Setup Instructions
 
@@ -17,7 +17,7 @@ In "Project > Project Settings", copy the Project number.
 
 Go to https://script.google.com. Click "New script". Paste the contents of `google_apps_script.txt`. Save (give it a name). From "File > Project properties > Info", copy the "Project key". In "Resources > Cloud Platform project", paste the project number you copied earlier. Click "Confirm".
 
-In the R project, in setup.R, replace:
+Open `gscsv.Rproj` in RStudio. In setup.R, replace:
 
 - `INSERT_KEY_HERE` with the key you got earlier
 - `INSERT_SECRET_HERE` with the secret you copied earlier
